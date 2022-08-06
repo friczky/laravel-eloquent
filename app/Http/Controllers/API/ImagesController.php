@@ -59,4 +59,48 @@ class ImagesController extends Controller
 
         return response()->json($data);
     }
+
+    public function update(Request $request, $id)
+    {
+        $data = Images::find($id);
+        if (!$data) {
+            $data = [
+                'status' => 'error',
+                'message' => 'No image found',
+            ];
+
+            return response()->json($data, 404);
+        }
+        $data->update($request->all());
+        $data = [
+            'meta' => [
+                'status' => 'success',
+                'message' => 'Image updated',
+            ],
+            'data' => $data,
+        ];
+        return response()->json($data);
+    }
+
+    public function destroy($id)
+    {
+        $data = Images::find($id);
+        if (!$data) {
+            $data = [
+                'status' => 'error',
+                'message' => 'No image found',
+            ];
+
+            return response()->json($data, 404);
+        }
+        $data->delete();
+        $data = [
+            'meta' => [
+                'status' => 'success',
+                'message' => 'Image deleted',
+            ],
+            'data' => $data,
+        ];
+        return response()->json($data);
+    }
 }

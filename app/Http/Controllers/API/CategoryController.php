@@ -43,4 +43,48 @@ class CategoryController extends Controller
 
         return response()->json($category);
     }
+
+    public function update(Request $request, $id)
+    {
+        $category = Categories::find($id);
+        if (!$category) {
+            $data = [
+                'status' => 'error',
+                'message' => 'No category found',
+            ];
+
+            return response()->json($data, 404);
+        }
+        $category->update($request->all());
+        $data = [
+            'meta' => [
+                'status' => 'success',
+                'message' => 'Category updated',
+            ],
+            'data' => $category,
+        ];
+        return response()->json($data);
+    }
+
+    public function destroy($id)
+    {
+        $category = Categories::find($id);
+        if (!$category) {
+            $data = [
+                'status' => 'error',
+                'message' => 'No category found',
+            ];
+
+            return response()->json($data, 404);
+        }
+        $category->delete();
+        $data = [
+            'meta' => [
+                'status' => 'success',
+                'message' => 'Category deleted',
+            ],
+            'data' => $category,
+        ];
+        return response()->json($data);
+    }
 }
